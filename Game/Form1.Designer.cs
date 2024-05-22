@@ -33,11 +33,14 @@
             this.TickRate = new System.Windows.Forms.Timer(this.components);
             this.MainPB = new System.Windows.Forms.PictureBox();
             this.StatusLabel = new System.Windows.Forms.Label();
+            this.PlayerAttackTimer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.MainPB)).BeginInit();
             this.SuspendLayout();
             // 
             // TickRate
             // 
+            this.TickRate.Enabled = true;
+            this.TickRate.Interval = 10;
             this.TickRate.Tick += new System.EventHandler(this.TickRate_Tick);
             // 
             // MainPB
@@ -54,11 +57,16 @@
             // 
             // StatusLabel
             // 
-            this.StatusLabel.Location = new System.Drawing.Point(12, 9);
+            this.StatusLabel.Location = new System.Drawing.Point(904, 9);
             this.StatusLabel.Name = "StatusLabel";
             this.StatusLabel.Size = new System.Drawing.Size(266, 23);
             this.StatusLabel.TabIndex = 1;
             this.StatusLabel.Text = "label1";
+            // 
+            // PlayerAttackTimer
+            // 
+            this.PlayerAttackTimer.Interval = 40;
+            this.PlayerAttackTimer.Tick += new System.EventHandler(this.PlayerAttackTimer_Tick);
             // 
             // Form1
             // 
@@ -74,6 +82,7 @@
             this.KeyPreview = true;
             this.Name = "Form1";
             this.Text = "Form1";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
@@ -88,6 +97,7 @@
         private System.Windows.Forms.PictureBox MainPB;
         private System.Windows.Forms.Timer TickRate;
         private System.Windows.Forms.Label StatusLabel;
+        private System.Windows.Forms.Timer PlayerAttackTimer;
     }
 }
 
