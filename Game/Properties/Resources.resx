@@ -118,6 +118,9 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="wrdeath44" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\wrdeath44.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="bright2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\bright2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -142,8 +145,14 @@
   <data name="wrrun1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\wrrun1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="wldeath3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\wldeath3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="MainMap" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\MainMap.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wrdeath11" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\wrdeath11.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="bleft4" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\bleft4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -163,14 +172,26 @@
   <data name="wattack13" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\wattack13.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="wldeath1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\wldeath1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Shadow" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Shadow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wrdeath1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\wrdeath1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="wattack10" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\wattack10.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="wldeath5" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\wldeath5.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="wattack2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\wattack2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wrdeath33" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\wrdeath33.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="bright1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\bright1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -187,11 +208,17 @@
   <data name="bleft2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\bleft2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="wrdeath4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\wrdeath4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="wlrun3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\wlrun3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="wrrun3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\wrrun3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wrdeath55" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\wrdeath55.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="bleft3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\bleft3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -202,11 +229,20 @@
   <data name="wattack12" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\wattack12.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="wrdeath5" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\wrdeath5.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="wlrun2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\wlrun2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="wattack4" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\wattack4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wrdeath2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\wrdeath2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wldeath4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\wldeath4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="bstanright" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\bstanright.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -217,6 +253,9 @@
   <data name="wattack5" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\wattack5.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="wrdeath3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\wrdeath3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="wrrun4" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\wrrun4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -226,8 +265,14 @@
   <data name="wattack9" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\wattack9.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Shadow1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Shadow1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="wldeath2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\wldeath2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="healthpng" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\healthpng.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wrdeath22" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\wrdeath22.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="bright4" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\bright4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -241,7 +286,22 @@
   <data name="wstanright" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\wstanright.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="healthpng" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\healthpng.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Shadow1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Shadow1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wldeath11" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\wldeath11.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wldeath22" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\wldeath22.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wldeath33" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\wldeath33.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wldeath44" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\wldeath44.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wldeath55" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\wldeath55.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

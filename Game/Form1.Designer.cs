@@ -34,6 +34,7 @@
             this.MainPB = new System.Windows.Forms.PictureBox();
             this.StatusLabel = new System.Windows.Forms.Label();
             this.PlayerAttackTimer = new System.Windows.Forms.Timer(this.components);
+            this.PlayerDeathTimer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.MainPB)).BeginInit();
             this.SuspendLayout();
             // 
@@ -68,6 +69,10 @@
             this.PlayerAttackTimer.Interval = 40;
             this.PlayerAttackTimer.Tick += new System.EventHandler(this.PlayerAttackTimer_Tick);
             // 
+            // PlayerDeathTimer
+            // 
+            this.PlayerDeathTimer.Tick += new System.EventHandler(this.PlayerDeathTimer_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -98,6 +103,7 @@
         private System.Windows.Forms.Timer TickRate;
         private System.Windows.Forms.Label StatusLabel;
         private System.Windows.Forms.Timer PlayerAttackTimer;
+        private System.Windows.Forms.Timer PlayerDeathTimer;
     }
 }
 

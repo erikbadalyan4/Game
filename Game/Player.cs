@@ -21,6 +21,8 @@ namespace Game
         public Rectangle AttackHitBox { get; set; }
         public abstract void StayR();
         public abstract void StayL();
+        public abstract void DeathR();
+        public abstract void DeathL();
         public abstract void MoveRight();
         public abstract void MoveLeft();
     }
@@ -55,6 +57,25 @@ namespace Game
         {
             Sprites.Clear();
             Sprites.Enqueue(new Bitmap(Properties.Resources.wstanleft));
+        }
+
+        public override void DeathR()
+        {
+            Sprites.Clear();
+            Sprites.Enqueue(new Bitmap(Properties.Resources.wrdeath11));
+            Sprites.Enqueue(new Bitmap(Properties.Resources.wrdeath22));
+            Sprites.Enqueue(new Bitmap(Properties.Resources.wrdeath33));
+            Sprites.Enqueue(new Bitmap(Properties.Resources.wrdeath44));
+            Sprites.Enqueue(new Bitmap(Properties.Resources.wrdeath55));
+        }
+        public override void DeathL()
+        {
+            Sprites.Clear();
+            Sprites.Enqueue(new Bitmap(Properties.Resources.wldeath11));
+            Sprites.Enqueue(new Bitmap(Properties.Resources.wldeath22));
+            Sprites.Enqueue(new Bitmap(Properties.Resources.wldeath33));
+            Sprites.Enqueue(new Bitmap(Properties.Resources.wldeath44));
+            Sprites.Enqueue(new Bitmap(Properties.Resources.wldeath55));
         }
         public override void MoveRight()
         {

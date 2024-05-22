@@ -207,5 +207,65 @@
   <ItemGroup>
     <None Include="Resources\healthpng.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wldeath1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wldeath2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wldeath3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wldeath4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wldeath5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wrdeath1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wrdeath2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wrdeath3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wrdeath4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wrdeath5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wrdeath11.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wrdeath22.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wrdeath33.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wrdeath44.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wrdeath55.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wldeath11.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wldeath22.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wldeath33.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wldeath44.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wldeath55.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
