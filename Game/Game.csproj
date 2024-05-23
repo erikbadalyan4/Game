@@ -312,5 +312,65 @@
   <ItemGroup>
     <None Include="Resources\playbutton2.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bldeath1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bldeath2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bldeath3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bldeath4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\brdeath1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\brdeath2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\brdeath3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\brdeath4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sldeath1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sldeath2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sldeath3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sldeath4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\srdeath1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\srdeath2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\srdeath3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\srdeath4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\formback.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sun.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\treesback.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\stonesback.JPG" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

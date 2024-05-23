@@ -36,13 +36,13 @@ namespace Game
         {
             playButton.Visible = false;
             MainPB.Visible = true;
-            this.BackgroundImage = null;
+            this.BackgroundImage = Properties.Resources.formback;
             ResizeMap();
             Time = 0;
             Player = new Warrior();
             TickRate.Start();
-            Enemies.Add(new Bird(-MainPB.Left + (this.Width / 2 - PlayerSprite.Width / 2) - 100, -MainPB.Top + (this.Height / 2 - PlayerSprite.Height / 2) - 20 - 150));
-            Enemies.Add(new Slime(-MainPB.Left + (this.Width / 2 - PlayerSprite.Width / 2) +100, -MainPB.Top + (this.Height / 2 - PlayerSprite.Height / 2) - 20 + 150));
+            //Enemies.Add(new Bird(-MainPB.Left + (this.Width / 2 - PlayerSprite.Width / 2) - 100, -MainPB.Top + (this.Height / 2 - PlayerSprite.Height / 2) - 20 - 150));
+            //Enemies.Add(new Slime(-MainPB.Left + (this.Width / 2 - PlayerSprite.Width / 2) +100, -MainPB.Top + (this.Height / 2 - PlayerSprite.Height / 2) - 20 + 150));
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -221,6 +221,7 @@ namespace Game
         private void TickRate_Tick(object sender, EventArgs e)
         {
             MainPB.Invalidate();
+            this.Invalidate();
             Time += TickRate.Interval;
             if (Time % Player.AttackInterval == 0) 
             {
@@ -243,9 +244,42 @@ namespace Game
                 
                 
             }
+            if (Time % 10000 == 0)
+            {
+                Random rand = new Random();
+                int numberMob = rand.Next(1, 3);//Всего прописано два моба, будет создаваться на рандом моб:1-птица,2-слизень
+                int RightOrLeft = rand.Next(1, 3);//1-будем генерировать моба справа, 2 - слева
+                int TopOrBottom = rand.Next(1, 3);//1-будем генерировать сверху, 2 - снизу
+                int X, Y;
+                if (RightOrLeft == 1)
+                {
+                    X = Player.HitBox.X - rand.Next(610, 650);
+                }
+                else
+                {
+                    X = Player.HitBox.X + rand.Next(610, 650);
+                }
+                if (TopOrBottom == 1)
+                {
+                    Y = Player.HitBox.Y - rand.Next(360, 400);
+                }
+                else
+                {
+                    Y = Player.HitBox.Y + rand.Next(360, 400);
+                }
+                if (numberMob == 1)
+                {
+                    Enemies.Add(new Bird(X, Y));
+                }
+                else if (numberMob == 2)
+                {
+                    Enemies.Add(new Slime(X, Y));
+                }
+            }
             foreach (Enemy enemy in Enemies) 
             {
-                if (PlayerDeathTimer.Enabled) 
+                
+                if (PlayerDeathTimer.Enabled)
                 {
                     if (enemy.Step.X > 0)
                     {
@@ -256,42 +290,90 @@ namespace Game
                         enemy.StayL();
                     }
                 }
-                if (Time % 40 == 0) 
+                if (enemy.Health <= 0 && enemy.Damage != 0) 
+                {
+                    if (enemy.Step.X > 0)
+                    {
+                        enemy.DeathR();
+                    }
+                    else
+                    {
+                        enemy.DeathL();
+                    }
+                    enemy.DeathTime = Time;
+                }
+                if (Time % 40 == 0)
                 {
                     enemy.CalculateVector(Player);
                     enemy.NextStep();
-                    if (Time % 320 == 0) 
+                    if (Time % 320 == 0 && enemy.Damage != 0)//Проверяю дамаг, так как после прошлой проверки моб мог умереть
                     {
                         if (enemy.Step.X > 0)
                         {
                             enemy.MoveRight();
                         }
-                        else 
+                        else
                         {
                             enemy.MoveLeft();
                         }
                     }
-                    if (Time % 80 == 0) 
+                    if (Time % 80 == 0&&enemy.DeathSpriteIndex!=4)
                     {
                         enemy.EnemySprite = new Bitmap(enemy.Sprites.Dequeue());
                         enemy.Sprites.Enqueue(enemy.EnemySprite);
+                        if(enemy.Damage == 0) enemy.DeathSpriteIndex++;
                     }
                     Rectangle NewHitbox = new Rectangle(enemy.HitBox.X + enemy.Step.X, enemy.HitBox.Y + enemy.Step.Y, enemy.EnemySprite.Width, enemy.EnemySprite.Height);
                     bool notCross = true;
+                        
                     foreach (Enemy newen in Enemies) // Это делается для того, чтобы если будет близко находится несколько врагов, их текстуры не сливались
                     {
-                        if (enemy != newen &&(Math.Abs(NewHitbox.X-newen.HitBox.X)<10 && Math.Abs(NewHitbox.Y - newen.HitBox.Y)<10))
+                        if (enemy != newen && (Math.Abs(NewHitbox.X - newen.HitBox.X) < 10 && Math.Abs(NewHitbox.Y - newen.HitBox.Y) < 10))
                         {
                             notCross = false;
                         }
                     }
-                    if (notCross) enemy.HitBox = NewHitbox;
+                    if (notCross && enemy.Damage != 0) enemy.HitBox = NewHitbox;
                 }
-                if (Player.HitBox.IntersectsWith(new Rectangle(enemy.HitBox.X+15,enemy.HitBox.Y,enemy.HitBox.Width-15,enemy.HitBox.Height)) &&(Time-enemy.AttackTime>=1000)) 
+                if (Player.HitBox.IntersectsWith(new Rectangle(enemy.HitBox.X, enemy.HitBox.Y, enemy.HitBox.Width - 15, enemy.HitBox.Height-15)) && (Time - enemy.AttackTime >= 1000))
                 {
                     Player.Health -= enemy.Damage;
                     enemy.AttackTime = Time;
-                } 
+                }
+                if (enemy.Damage==0&&Time - enemy.DeathTime > 3000) 
+                {
+                    Random rand = new Random();
+                    int numberMob = rand.Next(1, 4);//Всего прописано два моба, будет создаваться на рандом моб:1-птица,2,3-слизень(слизни слабее поэтому шанс их появления больше)
+                    int RightOrLeft = rand.Next(1, 3);//1-будем генерировать моба справа, 2 - слева
+                    int TopOrBottom = rand.Next(1, 3);//1-будем генерировать сверху, 2 - снизу
+                    int X, Y;
+                    if (RightOrLeft == 1)
+                    {
+                        X = Player.HitBox.X - rand.Next(610, 650);
+                    }
+                    else
+                    {
+                        X = Player.HitBox.X + rand.Next(610, 650);
+                    }
+                    if (TopOrBottom == 1)
+                    {
+                        Y = Player.HitBox.Y - rand.Next(360, 400);
+                    }
+                    else
+                    {
+                        Y = Player.HitBox.Y + rand.Next(360, 400);
+                    }
+                    if (numberMob == 1)
+                    {
+                        Enemies.Add(new Bird(X, Y));
+                    }
+                    else 
+                    {
+                        Enemies.Add(new Slime(X, Y));
+                    }
+                    enemy.Rebith(X,Y);
+                }
+                 
             }
             StatusLabel.Text = "X: " + MainPB.Left + "  Y: " + MainPB.Top + "Time: " + Time;
         }
@@ -349,6 +431,17 @@ namespace Game
         private void playButton_MouseDown(object sender, MouseEventArgs e)
         {
             playButton.BackgroundImage = Properties.Resources.playbutton2;
+            
+        }
+
+        private void Form1_Paint(object sender, PaintEventArgs e)
+        {
+            if (TickRate.Enabled) 
+            {
+                Graphics g = e.Graphics;
+                g.DrawImage(Health, 6, 22);
+                g.DrawString(Convert.ToString(Player.Health) + "/" + Convert.ToString(Player.MaxHealth), new Font("Copperplate Gothic Bold", 14), Brushes.White, 6+ Health.Width, 30);
+            }
             
         }
 
