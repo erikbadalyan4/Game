@@ -267,5 +267,50 @@
   <ItemGroup>
     <None Include="Resources\wldeath55.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sleft1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sleft2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sleft3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sleft4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sright1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sright2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sright3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sright4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sstanleft.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sstanright.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\mainmenu.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\menu%281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\playbutton.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\playbutton1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\playbutton2.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

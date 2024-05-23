@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics.Contracts;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace Game
 {
@@ -16,7 +18,6 @@ namespace Game
         bool Moving = false;
         List<Enemy> Enemies = new List<Enemy>();
         bool PlayerAttackStart = false;//Когда начинается аттака персонажа, переменная становится true
-        bool PlayerDeathStart = false;//Когда начинается анимация смерти персонажа, переменная становится true
         int AttackIndex = 0;//Номер спрайта атаки, всего их шесть
         int DeathIndex = 0;//Номер спрайта смерти, всего их 5
         bool APress, WPress, SPress,DPress;//Переменные для обработки одновременно нажатия клавиш
@@ -31,14 +32,23 @@ namespace Game
         {
             InitializeComponent();
         }
-
+        public void StartGame() 
+        {
+            playButton.Visible = false;
+            MainPB.Visible = true;
+            this.BackgroundImage = null;
+            ResizeMap();
+            Time = 0;
+            Player = new Warrior();
+            TickRate.Start();
+            Enemies.Add(new Bird(-MainPB.Left + (this.Width / 2 - PlayerSprite.Width / 2) - 100, -MainPB.Top + (this.Height / 2 - PlayerSprite.Height / 2) - 20 - 150));
+            Enemies.Add(new Slime(-MainPB.Left + (this.Width / 2 - PlayerSprite.Width / 2) +100, -MainPB.Top + (this.Height / 2 - PlayerSprite.Height / 2) - 20 + 150));
+        }
         private void Form1_Load(object sender, EventArgs e)
         {
-            ResizeMap();
-            TickRate.Start();
-            Enemies.Add(new Bird(-MainPB.Left + (this.Width / 2 - PlayerSprite.Width / 2)-100, -MainPB.Top + (this.Height / 2 - PlayerSprite.Height / 2) - 20-150));
-            //Enemies.Add(new Bird(-MainPB.Left + (this.Width / 2 - PlayerSprite.Width / 2) +100, -MainPB.Top + (this.Height / 2 - PlayerSprite.Height / 2) - 20 + 150));
 
+            MainPB.Visible = false;
+            
         }
         private void ResizeMap()// метод для того чтобы карта корректно отображалась в picrurebox
         {
@@ -51,11 +61,25 @@ namespace Game
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (!PlayerDeathStart) 
+            if (TickRate.Enabled) 
             {
                 switch (e.KeyCode)
                 {
                     case Keys.W:
+                        if (!Moving)
+                        {
+                            Moving = true;
+                            WPress = true;
+                            if (XShadow == 0)
+                            {
+                                Player.MoveRight();
+                            }
+                            else
+                            {
+                                Player.MoveLeft();
+                                XShadow = 12;
+                            }
+                        }
                         if (MainPB.Top < 320)
                         {
                             if (APress && MainPB.Left < 577)
@@ -78,6 +102,21 @@ namespace Game
                         Player.Sprites.Enqueue(PlayerSprite);
                         break;
                     case Keys.S:
+                        if (!Moving)
+                        {
+                            Moving = true;
+                            SPress = true;
+                            if (XShadow == 0)
+                            {
+                                Player.MoveRight();
+                            }
+                            else
+                            {
+                                Player.MoveLeft();
+                                XShadow = 12;
+                            }
+                        }
+                        
                         if (MainPB.Top > -2323)
                         {
                             if (APress && MainPB.Left < 577)
@@ -99,6 +138,19 @@ namespace Game
                         Player.Sprites.Enqueue(PlayerSprite);
                         break;
                     case Keys.A:
+                        APress = true;
+                        if (!Moving)
+                        {
+                            Moving = true;
+                            Player.MoveLeft();
+                            XShadow = 12;
+                        }
+                        if ((WPress || SPress) && !TwoKey)
+                        {
+                            TwoKey = true;
+                            Player.MoveLeft();
+                            XShadow = 12;
+                        }
                         if (MainPB.Left < 577)
                         {
                             if (WPress && MainPB.Top < 320)
@@ -124,6 +176,19 @@ namespace Game
                         }
                         break;
                     case Keys.D:
+                        DPress = true;
+                        if (!Moving)
+                        {
+                            Moving = true;
+                            Player.MoveRight();
+                            XShadow = 0;
+                        }
+                        if ((WPress || SPress) && !TwoKey)
+                        {
+                            TwoKey = true;
+                            Player.MoveRight();
+                            XShadow = 0;
+                        }
                         if (MainPB.Left > -2075)
                         {
                             if (WPress && MainPB.Top < 320)
@@ -149,10 +214,8 @@ namespace Game
                         }
                         break;
                 }
-            }
-            
-            MainPB.Invalidate();
-            
+                MainPB.Invalidate();
+            }   
         }
 
         private void TickRate_Tick(object sender, EventArgs e)
@@ -164,8 +227,9 @@ namespace Game
                 PlayerAttackTimer.Start();
                 AttackIndex = 0;
             }
-            if (Player.Health <= 0&&!PlayerDeathStart) 
+            if (Player.Health <= 0&&!PlayerDeathTimer.Enabled) 
             {
+                DeathIndex = 0;
                 if (XShadow == 0)
                 {
                     Player.DeathR();
@@ -174,16 +238,29 @@ namespace Game
                 {
                     Player.DeathL();
                 }
+                TickRate.Stop();
                 PlayerDeathTimer.Start();
-                DeathIndex = 0;
+                
+                
             }
             foreach (Enemy enemy in Enemies) 
             {
-                if (Time % 20 == 0) 
+                if (PlayerDeathTimer.Enabled) 
+                {
+                    if (enemy.Step.X > 0)
+                    {
+                        enemy.StayR();
+                    }
+                    else
+                    {
+                        enemy.StayL();
+                    }
+                }
+                if (Time % 40 == 0) 
                 {
                     enemy.CalculateVector(Player);
                     enemy.NextStep();
-                    if (Time % 160 == 0) 
+                    if (Time % 320 == 0) 
                     {
                         if (enemy.Step.X > 0)
                         {
@@ -194,7 +271,7 @@ namespace Game
                             enemy.MoveLeft();
                         }
                     }
-                    if (Time % 40 == 0) 
+                    if (Time % 80 == 0) 
                     {
                         enemy.EnemySprite = new Bitmap(enemy.Sprites.Dequeue());
                         enemy.Sprites.Enqueue(enemy.EnemySprite);
@@ -210,7 +287,7 @@ namespace Game
                     }
                     if (notCross) enemy.HitBox = NewHitbox;
                 }
-                if (Player.HitBox.IntersectsWith(new Rectangle(enemy.HitBox.X,enemy.HitBox.Y,enemy.HitBox.Width - 50,enemy.HitBox.Height-30)) &&(Time-enemy.AttackTime>=1000)) 
+                if (Player.HitBox.IntersectsWith(new Rectangle(enemy.HitBox.X+15,enemy.HitBox.Y,enemy.HitBox.Width-15,enemy.HitBox.Height)) &&(Time-enemy.AttackTime>=1000)) 
                 {
                     Player.Health -= enemy.Damage;
                     enemy.AttackTime = Time;
@@ -226,7 +303,7 @@ namespace Game
 
         private void PlayerAttackTimer_Tick(object sender, EventArgs e)
         {
-            if (AttackIndex < 30)//30 чтобы анимация 5 раз повторилась
+            if (AttackIndex < 30&&!PlayerDeathTimer.Enabled)//30 чтобы анимация 5 раз повторилась
             {
                 PlayerAttackStart = true;
                 foreach (Enemy enemy in Enemies) 
@@ -252,10 +329,10 @@ namespace Game
         {
             if (DeathIndex < 5)
             {
-                PlayerDeathStart = true;
                 PlayerSprite = new Bitmap(Player.Sprites.Dequeue());
                 Player.Sprites.Enqueue(PlayerSprite);
                 DeathIndex++;
+                MainPB.Invalidate();
             }
             else 
             {
@@ -264,11 +341,28 @@ namespace Game
             }
         }
 
+        private void playButton_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void playButton_MouseDown(object sender, MouseEventArgs e)
+        {
+            playButton.BackgroundImage = Properties.Resources.playbutton2;
+            
+        }
+
+        private void playButton_MouseUp(object sender, MouseEventArgs e)
+        {
+            playButton.BackgroundImage = Properties.Resources.playbutton1;
+            StartGame();
+        }
+
         private void MainPB_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
             //Отрисовка персонажа 
-            Player.HitBox = new Rectangle(-MainPB.Left + (this.Width / 2 - PlayerSprite.Width / 2), -MainPB.Top + (this.Height / 2 - PlayerSprite.Height / 2) - 20,PlayerSprite.Width, PlayerSprite.Height);
+            Player.HitBox = new Rectangle(-MainPB.Left + (this.Width / 2 - PlayerSprite.Width / 2), -MainPB.Top + (this.Height / 2 - PlayerSprite.Height / 2) - 20,Player.HitBox.Width, Player.HitBox.Height);
 
             if (PlayerAttackStart)
             {
@@ -276,129 +370,63 @@ namespace Game
                 g.DrawImage(AttackSprite, Player.HitBox.X - 50 + XShadow, Player.HitBox.Y );
             }
             g.DrawImage(Shadow, Player.HitBox.X-15+XShadow, Player.HitBox.Y-6);
+            foreach (Enemy enemy in Enemies) 
+            {
+                g.DrawImage(new Bitmap(Shadow, 90, 100), enemy.HitBox.X +enemy.Shadow.X, enemy.HitBox.Y +enemy.Shadow.Y);
+            }
             g.DrawImage(PlayerSprite,Player.HitBox.X,Player.HitBox.Y);
             //Отрисовка врагов
             foreach (Enemy enemy in Enemies) 
             {
-                g.DrawImage(new Bitmap(Shadow,90,100), enemy.HitBox.X - 15 + XShadow, enemy.HitBox.Y - 6);
-                g.DrawImage(enemy.EnemySprite, enemy.HitBox.X, enemy.HitBox.Y);
-                g.DrawRectangle(Pens.Black, enemy.HitBox.X, enemy.HitBox.Y-5,enemy.HitBox.Width-5,5);
-                g.FillRectangle(Brushes.Red, enemy.HitBox.X+1, enemy.HitBox.Y - 4, (float)(((enemy.HitBox.Width - 5)/enemy.MaxHealth)*enemy.Health), 4);
+
+                    g.DrawImage(enemy.EnemySprite, enemy.HitBox.X, enemy.HitBox.Y);
+                
+                g.DrawRectangle(Pens.Black, enemy.HitBox.X, enemy.HitBox.Y-5,enemy.HealthBoxWith,5);
+                g.FillRectangle(Brushes.Red, enemy.HitBox.X+1, enemy.HitBox.Y - 4, (float)(((enemy.HealthBoxWith)/enemy.MaxHealth)*enemy.Health), 4);
             }
             //Отрисовка Hud
             g.DrawImage(Health, Player.HitBox.X - 572, Player.HitBox.Y - 300);
             g.DrawString(Convert.ToString(Player.Health) + "/" + Convert.ToString(Player.MaxHealth), new Font("Copperplate Gothic Bold", 14),Brushes.White, Player.HitBox.X - 572+Health.Width, Player.HitBox.Y - 290);
         }
 
-        private void Form1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        private void Form1_KeyUp(object sender, KeyEventArgs e)
         {
-            if (!PlayerDeathStart) 
+            if (TickRate.Enabled) 
             {
+                if (Moving)
+                {
+                    Moving = false;
+                    if (XShadow == 0)
+                    {
+                        Player.StayR();
+                    }
+                    else
+                    {
+                        XShadow = 7;
+                        Player.StayL();
+                    }
+                    PlayerSprite = new Bitmap(Player.Sprites.Dequeue());
+                    Player.Sprites.Enqueue(PlayerSprite);
+                }
                 switch (e.KeyCode)
                 {
                     case Keys.W:
-                        if (!Moving)
-                        {
-                            Moving = true;
-                            WPress = true;
-                            if (XShadow == 0)
-                            {
-                                Player.MoveRight();
-                            }
-                            else
-                            {
-                                Player.MoveLeft();
-                                XShadow = 12;
-                            }
-                        }
-
+                        WPress = false;
+                        TwoKey = false;
                         break;
                     case Keys.S:
-                        if (!Moving)
-                        {
-                            Moving = true;
-                            SPress = true;
-                            if (XShadow == 0)
-                            {
-                                Player.MoveRight();
-                            }
-                            else
-                            {
-                                Player.MoveLeft();
-                                XShadow = 12;
-                            }
-                        }
+                        SPress = false;
+                        TwoKey = false;
                         break;
                     case Keys.A:
-                        APress = true;
-                        if (!Moving)
-                        {
-                            Moving = true;
-                            Player.MoveLeft();
-                            XShadow = 12;
-                        }
-                        if ((WPress || SPress) && !TwoKey)
-                        {
-                            TwoKey = true;
-                            Player.MoveLeft();
-                            XShadow = 12;
-                        }
+                        APress = false;
                         break;
                     case Keys.D:
-                        DPress = true;
-                        if (!Moving)
-                        {
-                            Moving = true;
-                            Player.MoveRight();
-                            XShadow = 0;
-                        }
-                        if ((WPress || SPress) && !TwoKey)
-                        {
-                            TwoKey = true;
-                            Player.MoveRight();
-                            XShadow = 0;
-                        }
+                        DPress = false;
                         break;
                 }
             }
             
-            MainPB.Invalidate();
-        }
-
-        private void Form1_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (Moving) 
-            {
-                Moving = false;
-                if (XShadow == 0) 
-                {
-                    Player.StayR();
-                }
-                else 
-                {
-                    XShadow = 7;
-                    Player.StayL();
-                }
-                PlayerSprite = new Bitmap(Player.Sprites.Dequeue());
-                Player.Sprites.Enqueue(PlayerSprite);
-            }
-            switch (e.KeyCode) 
-            {
-                case Keys.W:
-                    WPress = false;
-                    TwoKey = false;
-                    break;
-                case Keys.S:
-                    SPress = false;
-                    TwoKey = false;
-                    break;
-                case Keys.A:
-                    APress = false;
-                    break;
-                case Keys.D:
-                    DPress = false;
-                    break;
-            }
         }
 
     }
