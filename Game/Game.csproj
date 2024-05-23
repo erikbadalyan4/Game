@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enemy.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -130,6 +131,246 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\BShadow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wattack1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wattack2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wattack3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wattack4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wattack5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wattack6.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wattack7.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wattack8.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wattack9.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wattack10.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wattack11.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wattack12.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wattack13.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bleft1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bleft2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bleft3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bleft4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bright1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bright2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bright3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bright4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bstanleft.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bstanright.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\health.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\healthpng.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wldeath1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wldeath2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wldeath3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wldeath4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wldeath5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wrdeath1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wrdeath2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wrdeath3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wrdeath4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wrdeath5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wrdeath11.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wrdeath22.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wrdeath33.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wrdeath44.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wrdeath55.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wldeath11.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wldeath22.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wldeath33.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wldeath44.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wldeath55.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sleft1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sleft2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sleft3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sleft4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sright1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sright2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sright3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sright4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sstanleft.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sstanright.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\mainmenu.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\menu%281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\playbutton.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\playbutton1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\playbutton2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bldeath1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bldeath2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bldeath3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bldeath4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\brdeath1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\brdeath2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\brdeath3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\brdeath4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sldeath1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sldeath2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sldeath3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sldeath4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\srdeath1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\srdeath2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\srdeath3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\srdeath4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\formback.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sun.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\treesback.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\stonesback.JPG" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -29,20 +29,24 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.TickRate = new System.Windows.Forms.Timer(this.components);
             this.MainPB = new System.Windows.Forms.PictureBox();
             this.StatusLabel = new System.Windows.Forms.Label();
+            this.PlayerAttackTimer = new System.Windows.Forms.Timer(this.components);
+            this.PlayerDeathTimer = new System.Windows.Forms.Timer(this.components);
+            this.playButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.MainPB)).BeginInit();
             this.SuspendLayout();
             // 
             // TickRate
             // 
+            this.TickRate.Interval = 10;
             this.TickRate.Tick += new System.EventHandler(this.TickRate_Tick);
             // 
             // MainPB
             // 
             this.MainPB.BackColor = System.Drawing.SystemColors.Control;
+            this.MainPB.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.MainPB.Image = global::Game.Properties.Resources.MainMap;
             this.MainPB.Location = new System.Drawing.Point(0, 0);
             this.MainPB.Name = "MainPB";
@@ -54,19 +58,47 @@
             // 
             // StatusLabel
             // 
-            this.StatusLabel.Location = new System.Drawing.Point(12, 9);
+            this.StatusLabel.Location = new System.Drawing.Point(904, 9);
             this.StatusLabel.Name = "StatusLabel";
             this.StatusLabel.Size = new System.Drawing.Size(266, 23);
             this.StatusLabel.TabIndex = 1;
             this.StatusLabel.Text = "label1";
+            // 
+            // PlayerAttackTimer
+            // 
+            this.PlayerAttackTimer.Interval = 40;
+            this.PlayerAttackTimer.Tick += new System.EventHandler(this.PlayerAttackTimer_Tick);
+            // 
+            // PlayerDeathTimer
+            // 
+            this.PlayerDeathTimer.Tick += new System.EventHandler(this.PlayerDeathTimer_Tick);
+            // 
+            // playButton
+            // 
+            this.playButton.BackColor = System.Drawing.Color.Transparent;
+            this.playButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.playButton.FlatAppearance.BorderSize = 0;
+            this.playButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.playButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.playButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.playButton.Location = new System.Drawing.Point(471, 288);
+            this.playButton.Name = "playButton";
+            this.playButton.Size = new System.Drawing.Size(244, 113);
+            this.playButton.TabIndex = 2;
+            this.playButton.UseVisualStyleBackColor = false;
+            this.playButton.Click += new System.EventHandler(this.playButton_Click);
+            this.playButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.playButton_MouseDown);
+            this.playButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.playButton_MouseUp);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
+            this.BackgroundImage = global::Game.Properties.Resources.mainmenu;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1182, 688);
+            this.Controls.Add(this.playButton);
             this.Controls.Add(this.StatusLabel);
             this.Controls.Add(this.MainPB);
             this.DoubleBuffered = true;
@@ -74,10 +106,11 @@
             this.KeyPreview = true;
             this.Name = "Form1";
             this.Text = "Form1";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
-            this.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.Form1_PreviewKeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.MainPB)).EndInit();
             this.ResumeLayout(false);
 
@@ -88,6 +121,9 @@
         private System.Windows.Forms.PictureBox MainPB;
         private System.Windows.Forms.Timer TickRate;
         private System.Windows.Forms.Label StatusLabel;
+        private System.Windows.Forms.Timer PlayerAttackTimer;
+        private System.Windows.Forms.Timer PlayerDeathTimer;
+        private System.Windows.Forms.Button playButton;
     }
 }
 

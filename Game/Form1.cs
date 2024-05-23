@@ -2,32 +2,53 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics.Contracts;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace Game
 {
     public partial class Form1 : Form
     {
+        int Time = 0;//Время в миллисекундах
         bool Moving = false;
+        List<Enemy> Enemies = new List<Enemy>();
+        bool PlayerAttackStart = false;//Когда начинается аттака персонажа, переменная становится true
+        int AttackIndex = 0;//Номер спрайта атаки, всего их шесть
+        int DeathIndex = 0;//Номер спрайта смерти, всего их 5
         bool APress, WPress, SPress,DPress;//Переменные для обработки одновременно нажатия клавиш
         bool TwoKey;//Если нажаты две и более клавиш то true
         Player Player = new Warrior();
         Bitmap PlayerSprite = Properties.Resources.wstanright;
+        Bitmap AttackSprite;
         Bitmap Shadow = new Bitmap(Properties.Resources.BShadow,70,80);
+        Bitmap Health = new Bitmap(Properties.Resources.healthpng,80,40);
         int XShadow = 0;// При движении в левую стророну тень смещалась немного вперед, для это нужна эта переменная
         public Form1()
         {
             InitializeComponent();
         }
-
+        public void StartGame() 
+        {
+            playButton.Visible = false;
+            MainPB.Visible = true;
+            this.BackgroundImage = Properties.Resources.formback;
+            ResizeMap();
+            Time = 0;
+            Player = new Warrior();
+            TickRate.Start();
+            //Enemies.Add(new Bird(-MainPB.Left + (this.Width / 2 - PlayerSprite.Width / 2) - 100, -MainPB.Top + (this.Height / 2 - PlayerSprite.Height / 2) - 20 - 150));
+            //Enemies.Add(new Slime(-MainPB.Left + (this.Width / 2 - PlayerSprite.Width / 2) +100, -MainPB.Top + (this.Height / 2 - PlayerSprite.Height / 2) - 20 + 150));
+        }
         private void Form1_Load(object sender, EventArgs e)
         {
-            ResizeMap();
-            TickRate.Start();
+
+            MainPB.Visible = false;
+            
         }
         private void ResizeMap()// метод для того чтобы карта корректно отображалась в picrurebox
         {
@@ -40,227 +61,465 @@ namespace Game
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            switch (e.KeyCode) 
+            if (TickRate.Enabled) 
             {
-                case Keys.W:
-                    if (MainPB.Top < 320)
-                    {
-                        if (APress)
+                switch (e.KeyCode)
+                {
+                    case Keys.W:
+                        if (!Moving)
                         {
-                            MainPB.Top += Player.Speed - 1;
-                            MainPB.Left += Player.Speed - 1;
+                            Moving = true;
+                            WPress = true;
+                            if (XShadow == 0)
+                            {
+                                Player.MoveRight();
+                            }
+                            else
+                            {
+                                Player.MoveLeft();
+                                XShadow = 12;
+                            }
                         }
-                        else if (DPress)
+                        if (MainPB.Top < 320)
                         {
-                            MainPB.Top += Player.Speed - 1;
-                            MainPB.Left -= Player.Speed - 1;
+                            if (APress && MainPB.Left < 577)
+                            {
+                                MainPB.Top += Player.Speed - 1;
+                                MainPB.Left += Player.Speed - 1;
+                            }
+                            else if (DPress && MainPB.Left > -2075)
+                            {
+                                MainPB.Top += Player.Speed - 1;
+                                MainPB.Left -= Player.Speed - 1;
+                            }
+                            else
+                            {
+                                MainPB.Top += Player.Speed;
+                            }
+
                         }
-                        else 
+                        PlayerSprite = new Bitmap(Player.Sprites.Dequeue());
+                        Player.Sprites.Enqueue(PlayerSprite);
+                        break;
+                    case Keys.S:
+                        if (!Moving)
                         {
-                            MainPB.Top += Player.Speed;
+                            Moving = true;
+                            SPress = true;
+                            if (XShadow == 0)
+                            {
+                                Player.MoveRight();
+                            }
+                            else
+                            {
+                                Player.MoveLeft();
+                                XShadow = 12;
+                            }
                         }
                         
-                    }
-                    PlayerSprite = new Bitmap(Player.Sprites.Dequeue());
-                    Player.Sprites.Enqueue(PlayerSprite);
-                    break;
-                case Keys.S:
-                    if (MainPB.Top > -2323) 
-                    {
-                        if (APress)
+                        if (MainPB.Top > -2323)
                         {
-                            MainPB.Top -= Player.Speed - 1;
-                            MainPB.Left += Player.Speed - 1;
+                            if (APress && MainPB.Left < 577)
+                            {
+                                MainPB.Top -= Player.Speed - 1;
+                                MainPB.Left += Player.Speed - 1;
+                            }
+                            else if (DPress && MainPB.Left > -2075)
+                            {
+                                MainPB.Top -= Player.Speed - 1;
+                                MainPB.Left -= Player.Speed - 1;
+                            }
+                            else
+                            {
+                                MainPB.Top -= Player.Speed;
+                            }
                         }
-                        else if (DPress)
-                        {
-                            MainPB.Top -= Player.Speed - 1;
-                            MainPB.Left -= Player.Speed - 1;
-                        }
-                        else
-                        {
-                            MainPB.Top -= Player.Speed;
-                        }
-                    }
-                    PlayerSprite = new Bitmap(Player.Sprites.Dequeue());
-                    Player.Sprites.Enqueue(PlayerSprite);
-                    break;
-                case Keys.A:
-                    if (MainPB.Left < 577) 
-                    {
-                        if (WPress)
-                        {
-                            MainPB.Top += Player.Speed - 1;
-                            MainPB.Left += Player.Speed - 1;
-                        }
-                        else if (SPress)
-                        {
-                            MainPB.Top -= Player.Speed - 1;
-                            MainPB.Left += Player.Speed - 1;
-                        }
-                        else if (DPress) { }
-                        else
-                        {
-                            MainPB.Left += Player.Speed;
-                        } 
-                    }
-                    if (!DPress) 
-                    {
                         PlayerSprite = new Bitmap(Player.Sprites.Dequeue());
                         Player.Sprites.Enqueue(PlayerSprite);
-                    }
-                    break;
-                case Keys.D:
-                    if (MainPB.Left > -2075)
-                    {
-                        if (WPress)
+                        break;
+                    case Keys.A:
+                        APress = true;
+                        if (!Moving)
                         {
-                            MainPB.Top += Player.Speed - 1;
-                            MainPB.Left -= Player.Speed - 1;
+                            Moving = true;
+                            Player.MoveLeft();
+                            XShadow = 12;
                         }
-                        else if (SPress)
+                        if ((WPress || SPress) && !TwoKey)
                         {
-                            MainPB.Top -= Player.Speed - 1;
-                            MainPB.Left -= Player.Speed - 1;
+                            TwoKey = true;
+                            Player.MoveLeft();
+                            XShadow = 12;
                         }
-                        else if (APress) { }
-                        else
+                        if (MainPB.Left < 577)
                         {
-                            MainPB.Left -= Player.Speed;
+                            if (WPress && MainPB.Top < 320)
+                            {
+                                MainPB.Top += Player.Speed - 1;
+                                MainPB.Left += Player.Speed - 1;
+                            }
+                            else if (SPress && MainPB.Top > -2323)
+                            {
+                                MainPB.Top -= Player.Speed - 1;
+                                MainPB.Left += Player.Speed - 1;
+                            }
+                            else if (DPress) { }
+                            else
+                            {
+                                MainPB.Left += Player.Speed;
+                            }
                         }
-                    }
-                    if (!APress) 
-                    {
-                        PlayerSprite = new Bitmap(Player.Sprites.Dequeue());
-                        Player.Sprites.Enqueue(PlayerSprite);
-                    }
-                    break;
-            }
-            MainPB.Invalidate();
-            StatusLabel.Text = "X: " + MainPB.Left+"  Y: "+MainPB.Top;
+                        if (!DPress)
+                        {
+                            PlayerSprite = new Bitmap(Player.Sprites.Dequeue());
+                            Player.Sprites.Enqueue(PlayerSprite);
+                        }
+                        break;
+                    case Keys.D:
+                        DPress = true;
+                        if (!Moving)
+                        {
+                            Moving = true;
+                            Player.MoveRight();
+                            XShadow = 0;
+                        }
+                        if ((WPress || SPress) && !TwoKey)
+                        {
+                            TwoKey = true;
+                            Player.MoveRight();
+                            XShadow = 0;
+                        }
+                        if (MainPB.Left > -2075)
+                        {
+                            if (WPress && MainPB.Top < 320)
+                            {
+                                MainPB.Top += Player.Speed - 1;
+                                MainPB.Left -= Player.Speed - 1;
+                            }
+                            else if (SPress && MainPB.Top > -2323)
+                            {
+                                MainPB.Top -= Player.Speed - 1;
+                                MainPB.Left -= Player.Speed - 1;
+                            }
+                            else if (APress) { }
+                            else
+                            {
+                                MainPB.Left -= Player.Speed;
+                            }
+                        }
+                        if (!APress)
+                        {
+                            PlayerSprite = new Bitmap(Player.Sprites.Dequeue());
+                            Player.Sprites.Enqueue(PlayerSprite);
+                        }
+                        break;
+                }
+                MainPB.Invalidate();
+            }   
         }
 
         private void TickRate_Tick(object sender, EventArgs e)
         {
             MainPB.Invalidate();
+            this.Invalidate();
+            Time += TickRate.Interval;
+            if (Time % Player.AttackInterval == 0) 
+            {
+                PlayerAttackTimer.Start();
+                AttackIndex = 0;
+            }
+            if (Player.Health <= 0&&!PlayerDeathTimer.Enabled) 
+            {
+                DeathIndex = 0;
+                if (XShadow == 0)
+                {
+                    Player.DeathR();
+                }
+                else
+                {
+                    Player.DeathL();
+                }
+                TickRate.Stop();
+                PlayerDeathTimer.Start();
+                
+                
+            }
+            if (Time % 10000 == 0)
+            {
+                Random rand = new Random();
+                int numberMob = rand.Next(1, 3);//Всего прописано два моба, будет создаваться на рандом моб:1-птица,2-слизень
+                int RightOrLeft = rand.Next(1, 3);//1-будем генерировать моба справа, 2 - слева
+                int TopOrBottom = rand.Next(1, 3);//1-будем генерировать сверху, 2 - снизу
+                int X, Y;
+                if (RightOrLeft == 1)
+                {
+                    X = Player.HitBox.X - rand.Next(610, 650);
+                }
+                else
+                {
+                    X = Player.HitBox.X + rand.Next(610, 650);
+                }
+                if (TopOrBottom == 1)
+                {
+                    Y = Player.HitBox.Y - rand.Next(360, 400);
+                }
+                else
+                {
+                    Y = Player.HitBox.Y + rand.Next(360, 400);
+                }
+                if (numberMob == 1)
+                {
+                    Enemies.Add(new Bird(X, Y));
+                }
+                else if (numberMob == 2)
+                {
+                    Enemies.Add(new Slime(X, Y));
+                }
+            }
+            foreach (Enemy enemy in Enemies) 
+            {
+                
+                if (PlayerDeathTimer.Enabled)
+                {
+                    if (enemy.Step.X > 0)
+                    {
+                        enemy.StayR();
+                    }
+                    else
+                    {
+                        enemy.StayL();
+                    }
+                }
+                if (enemy.Health <= 0 && enemy.Damage != 0) 
+                {
+                    if (enemy.Step.X > 0)
+                    {
+                        enemy.DeathR();
+                    }
+                    else
+                    {
+                        enemy.DeathL();
+                    }
+                    enemy.DeathTime = Time;
+                }
+                if (Time % 40 == 0)
+                {
+                    enemy.CalculateVector(Player);
+                    enemy.NextStep();
+                    if (Time % 320 == 0 && enemy.Damage != 0)//Проверяю дамаг, так как после прошлой проверки моб мог умереть
+                    {
+                        if (enemy.Step.X > 0)
+                        {
+                            enemy.MoveRight();
+                        }
+                        else
+                        {
+                            enemy.MoveLeft();
+                        }
+                    }
+                    if (Time % 80 == 0&&enemy.DeathSpriteIndex!=4)
+                    {
+                        enemy.EnemySprite = new Bitmap(enemy.Sprites.Dequeue());
+                        enemy.Sprites.Enqueue(enemy.EnemySprite);
+                        if(enemy.Damage == 0) enemy.DeathSpriteIndex++;
+                    }
+                    Rectangle NewHitbox = new Rectangle(enemy.HitBox.X + enemy.Step.X, enemy.HitBox.Y + enemy.Step.Y, enemy.EnemySprite.Width, enemy.EnemySprite.Height);
+                    bool notCross = true;
+                        
+                    foreach (Enemy newen in Enemies) // Это делается для того, чтобы если будет близко находится несколько врагов, их текстуры не сливались
+                    {
+                        if (enemy != newen && (Math.Abs(NewHitbox.X - newen.HitBox.X) < 10 && Math.Abs(NewHitbox.Y - newen.HitBox.Y) < 10))
+                        {
+                            notCross = false;
+                        }
+                    }
+                    if (notCross && enemy.Damage != 0) enemy.HitBox = NewHitbox;
+                }
+                if (Player.HitBox.IntersectsWith(new Rectangle(enemy.HitBox.X, enemy.HitBox.Y, enemy.HitBox.Width - 15, enemy.HitBox.Height-15)) && (Time - enemy.AttackTime >= 1000))
+                {
+                    Player.Health -= enemy.Damage;
+                    enemy.AttackTime = Time;
+                }
+                if (enemy.Damage==0&&Time - enemy.DeathTime > 3000) 
+                {
+                    Random rand = new Random();
+                    int numberMob = rand.Next(1, 4);//Всего прописано два моба, будет создаваться на рандом моб:1-птица,2,3-слизень(слизни слабее поэтому шанс их появления больше)
+                    int RightOrLeft = rand.Next(1, 3);//1-будем генерировать моба справа, 2 - слева
+                    int TopOrBottom = rand.Next(1, 3);//1-будем генерировать сверху, 2 - снизу
+                    int X, Y;
+                    if (RightOrLeft == 1)
+                    {
+                        X = Player.HitBox.X - rand.Next(610, 650);
+                    }
+                    else
+                    {
+                        X = Player.HitBox.X + rand.Next(610, 650);
+                    }
+                    if (TopOrBottom == 1)
+                    {
+                        Y = Player.HitBox.Y - rand.Next(360, 400);
+                    }
+                    else
+                    {
+                        Y = Player.HitBox.Y + rand.Next(360, 400);
+                    }
+                    if (numberMob == 1)
+                    {
+                        Enemies.Add(new Bird(X, Y));
+                    }
+                    else 
+                    {
+                        Enemies.Add(new Slime(X, Y));
+                    }
+                    enemy.Rebith(X,Y);
+                }
+                 
+            }
+            StatusLabel.Text = "X: " + MainPB.Left + "  Y: " + MainPB.Top + "Time: " + Time;
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            TickRate.Stop();
+        }
+
+        private void PlayerAttackTimer_Tick(object sender, EventArgs e)
+        {
+            if (AttackIndex < 30&&!PlayerDeathTimer.Enabled)//30 чтобы анимация 5 раз повторилась
+            {
+                PlayerAttackStart = true;
+                foreach (Enemy enemy in Enemies) 
+                {
+                    if (Player.AttackHitBox.IntersectsWith(enemy.HitBox)) 
+                    {
+                        enemy.Health -= Player.Damage;
+                    }
+                }
+                AttackSprite = new Bitmap(Player.AttackSprite.Dequeue());
+                Player.AttackSprite.Enqueue(AttackSprite);
+                AttackIndex++;
+            }
+            else 
+            {
+                PlayerAttackTimer.Stop();
+                PlayerAttackStart = false;
+            }
             
+        }
+
+        private void PlayerDeathTimer_Tick(object sender, EventArgs e)
+        {
+            if (DeathIndex < 5)
+            {
+                PlayerSprite = new Bitmap(Player.Sprites.Dequeue());
+                Player.Sprites.Enqueue(PlayerSprite);
+                DeathIndex++;
+                MainPB.Invalidate();
+            }
+            else 
+            {
+                PlayerDeathTimer.Stop();
+                
+            }
+        }
+
+        private void playButton_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void playButton_MouseDown(object sender, MouseEventArgs e)
+        {
+            playButton.BackgroundImage = Properties.Resources.playbutton2;
+            
+        }
+
+        private void Form1_Paint(object sender, PaintEventArgs e)
+        {
+            if (TickRate.Enabled) 
+            {
+                Graphics g = e.Graphics;
+                g.DrawImage(Health, 6, 22);
+                g.DrawString(Convert.ToString(Player.Health) + "/" + Convert.ToString(Player.MaxHealth), new Font("Copperplate Gothic Bold", 14), Brushes.White, 6+ Health.Width, 30);
+            }
+            
+        }
+
+        private void playButton_MouseUp(object sender, MouseEventArgs e)
+        {
+            playButton.BackgroundImage = Properties.Resources.playbutton1;
+            StartGame();
         }
 
         private void MainPB_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            Player.HitBox = new Rectangle(-MainPB.Left + (this.Width / 2 - PlayerSprite.Width / 2), -MainPB.Top + (this.Height / 2 - PlayerSprite.Height / 2) - 20,PlayerSprite.Width, PlayerSprite.Height);
+            //Отрисовка персонажа 
+            Player.HitBox = new Rectangle(-MainPB.Left + (this.Width / 2 - PlayerSprite.Width / 2), -MainPB.Top + (this.Height / 2 - PlayerSprite.Height / 2) - 20,Player.HitBox.Width, Player.HitBox.Height);
 
-            g.DrawImage(Shadow, Player.HitBox.X-15+XShadow, Player.HitBox.Y-6);
-            g.DrawImage(PlayerSprite,Player.HitBox.X,Player.HitBox.Y);
-            MainPB.Invalidate();
-        }
-
-        private void Form1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
-        {
-            switch (e.KeyCode)
+            if (PlayerAttackStart)
             {
-                case Keys.W:
-                    if (!Moving)
-                    {
-                        Moving = true;
-                        WPress = true;
-                        if (XShadow == 0)
-                        {
-                            Player.MoveRight();
-                        }
-                        else
-                        {
-                            Player.MoveLeft();
-                            XShadow = 12;
-                        }
-                    }
-
-                    break;
-                case Keys.S:
-                    if (!Moving)
-                    {
-                        Moving = true;
-                        SPress = true;
-                        if (XShadow == 0)
-                        {
-                            Player.MoveRight();
-                        }
-                        else
-                        {
-                            Player.MoveLeft();
-                            XShadow = 12;
-                        }
-                    }
-                    break;
-                case Keys.A:
-                    APress = true;
-                    if (!Moving)
-                    {
-                        Moving = true;
-                        Player.MoveLeft();
-                        XShadow = 12;
-                    }
-                    if ((WPress || SPress)&&!TwoKey) 
-                    {
-                        TwoKey = true;
-                        Player.MoveLeft();
-                        XShadow = 12;
-                    }
-                    break;
-                case Keys.D:
-                    DPress = true;
-                    if (!Moving)
-                    {
-                        Moving = true;
-                        Player.MoveRight();
-                        XShadow = 0;
-                    }
-                    if ((WPress || SPress) && !TwoKey)
-                    {
-                        TwoKey = true;
-                        Player.MoveRight();
-                        XShadow = 0;
-                    }
-                    break;
+                Player.AttackHitBox = new Rectangle(Player.HitBox.X - 50 + XShadow, Player.HitBox.Y, 150, 75);
+                g.DrawImage(AttackSprite, Player.HitBox.X - 50 + XShadow, Player.HitBox.Y );
             }
-            MainPB.Invalidate();
+            g.DrawImage(Shadow, Player.HitBox.X-15+XShadow, Player.HitBox.Y-6);
+            foreach (Enemy enemy in Enemies) 
+            {
+                g.DrawImage(new Bitmap(Shadow, 90, 100), enemy.HitBox.X +enemy.Shadow.X, enemy.HitBox.Y +enemy.Shadow.Y);
+            }
+            g.DrawImage(PlayerSprite,Player.HitBox.X,Player.HitBox.Y);
+            //Отрисовка врагов
+            foreach (Enemy enemy in Enemies) 
+            {
+
+                    g.DrawImage(enemy.EnemySprite, enemy.HitBox.X, enemy.HitBox.Y);
+                
+                g.DrawRectangle(Pens.Black, enemy.HitBox.X, enemy.HitBox.Y-5,enemy.HealthBoxWith,5);
+                g.FillRectangle(Brushes.Red, enemy.HitBox.X+1, enemy.HitBox.Y - 4, (float)(((enemy.HealthBoxWith)/enemy.MaxHealth)*enemy.Health), 4);
+            }
+            //Отрисовка Hud
+            g.DrawImage(Health, Player.HitBox.X - 572, Player.HitBox.Y - 300);
+            g.DrawString(Convert.ToString(Player.Health) + "/" + Convert.ToString(Player.MaxHealth), new Font("Copperplate Gothic Bold", 14),Brushes.White, Player.HitBox.X - 572+Health.Width, Player.HitBox.Y - 290);
         }
 
         private void Form1_KeyUp(object sender, KeyEventArgs e)
         {
-            if (Moving) 
+            if (TickRate.Enabled) 
             {
-                Moving = false;
-                if (XShadow == 0) 
+                if (Moving)
                 {
-                    Player.StayR();
+                    Moving = false;
+                    if (XShadow == 0)
+                    {
+                        Player.StayR();
+                    }
+                    else
+                    {
+                        XShadow = 7;
+                        Player.StayL();
+                    }
+                    PlayerSprite = new Bitmap(Player.Sprites.Dequeue());
+                    Player.Sprites.Enqueue(PlayerSprite);
                 }
-                else 
+                switch (e.KeyCode)
                 {
-                    XShadow = 7;
-                    Player.StayL();
+                    case Keys.W:
+                        WPress = false;
+                        TwoKey = false;
+                        break;
+                    case Keys.S:
+                        SPress = false;
+                        TwoKey = false;
+                        break;
+                    case Keys.A:
+                        APress = false;
+                        break;
+                    case Keys.D:
+                        DPress = false;
+                        break;
                 }
-                PlayerSprite = new Bitmap(Player.Sprites.Dequeue());
-                Player.Sprites.Enqueue(PlayerSprite);
             }
-            switch (e.KeyCode) 
-            {
-                case Keys.W:
-                    WPress = false;
-                    TwoKey = false;
-                    break;
-                case Keys.S:
-                    SPress = false;
-                    TwoKey = false;
-                    break;
-                case Keys.A:
-                    APress = false;
-                    break;
-                case Keys.D:
-                    DPress = false;
-                    break;
-            }
+            
         }
 
     }
