@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
+using System.Diagnostics;
 
 namespace Game
 {
@@ -28,6 +29,12 @@ namespace Game
         Bitmap Shadow = new Bitmap(Properties.Resources.BShadow,70,80);
         Bitmap Health = new Bitmap(Properties.Resources.healthpng,80,40);
         int XShadow = 0;// При движении в левую стророну тень смещалась немного вперед, для это нужна эта переменная
+        double LevelExp = 100;//Сколько опыта надо получить для следующего уроня, с каждым уровнем значение увеличивается
+        Stopwatch Stopwatch = new Stopwatch();
+        int Transparent = 0;
+        int PauseTransparent;
+        int Minutes;
+        int Seconds;
         public Form1()
         {
             InitializeComponent();
@@ -35,20 +42,44 @@ namespace Game
         public void StartGame() 
         {
             playButton.Visible = false;
+            deathLabel.Visible = false;
             MainPB.Visible = true;
-            this.BackgroundImage = Properties.Resources.formback;
+            panel1.Location = new Point(409, 132);
+            BackPB.Image = Properties.Resources.treesback;
             ResizeMap();
             Time = 0;
             Player = new Warrior();
+            Stopwatch.Start();
             TickRate.Start();
             //Enemies.Add(new Bird(-MainPB.Left + (this.Width / 2 - PlayerSprite.Width / 2) - 100, -MainPB.Top + (this.Height / 2 - PlayerSprite.Height / 2) - 20 - 150));
             //Enemies.Add(new Slime(-MainPB.Left + (this.Width / 2 - PlayerSprite.Width / 2) +100, -MainPB.Top + (this.Height / 2 - PlayerSprite.Height / 2) - 20 + 150));
         }
+        public void StopGame() 
+        {
+            TickRate.Stop();
+            Stopwatch.Stop();
+            Moving = false;
+            TwoKey = false;
+            APress = false;
+            WPress = false;
+            SPress = false;
+            DPress = false;
+        }
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            panel1.Visible = false;
             MainPB.Visible = false;
-            
+            deathLabel.Visible = false;
+            ScoreLabel.Visible = false;
+            ScoreNum.Visible = false;
+            TimeLabel.Visible = false;
+            TimeNum.Visible = false;
+            LevelLabel.Visible = false;
+            LevelNum.Visible = false;
+            exitButton.Visible = false;
+            playButton.Location = new Point(471, 288);
+            BackPB.Dock = DockStyle.Fill;
+            BackPB.SendToBack();
         }
         private void ResizeMap()// метод для того чтобы карта корректно отображалась в picrurebox
         {
@@ -215,13 +246,31 @@ namespace Game
                         break;
                 }
                 MainPB.Invalidate();
-            }   
+            }
+            if (e.KeyCode == Keys.Escape && !playButton.Visible) 
+            {
+                if (TickRate.Enabled)
+                {
+                    StopGame();
+                    pauseTimer.Start();
+                    
+                }
+                else 
+                {
+                    TickRate.Start();
+                    Stopwatch.Start();
+                    pauseTimer.Stop();
+                    PauseTransparent = 0;
+                    
+                }
+                    
+            }
         }
 
         private void TickRate_Tick(object sender, EventArgs e)
         {
             MainPB.Invalidate();
-            this.Invalidate();
+            BackPB.Invalidate();
             Time += TickRate.Interval;
             if (Time % Player.AttackInterval == 0) 
             {
@@ -240,11 +289,14 @@ namespace Game
                     Player.DeathL();
                 }
                 TickRate.Stop();
-                PlayerDeathTimer.Start();
-                
-                
+                PlayerDeathTimer.Start(); 
             }
-            if (Time % 10000 == 0)
+            if (Player.Health > 0 && Time % 660 == 0) 
+            {
+                if (Player.Health + Player.Regen < Player.MaxHealth) Player.Health += Player.Regen;
+                else Player.Health = Player.MaxHealth;
+            }
+            if (Time % 10000 == 0 && Enemies.Count<16)
             {
                 Random rand = new Random();
                 int numberMob = rand.Next(1, 3);//Всего прописано два моба, будет создаваться на рандом моб:1-птица,2-слизень
@@ -279,7 +331,7 @@ namespace Game
             foreach (Enemy enemy in Enemies) 
             {
                 
-                if (PlayerDeathTimer.Enabled)
+                if (PlayerDeathTimer.Enabled && enemy.Damage!=0)
                 {
                     if (enemy.Step.X > 0)
                     {
@@ -300,6 +352,8 @@ namespace Game
                     {
                         enemy.DeathL();
                     }
+                    Player.Experience += enemy.Experience;
+                    Player.MaxExperience += enemy.Experience;
                     enemy.DeathTime = Time;
                 }
                 if (Time % 40 == 0)
@@ -328,22 +382,23 @@ namespace Game
                         
                     foreach (Enemy newen in Enemies) // Это делается для того, чтобы если будет близко находится несколько врагов, их текстуры не сливались
                     {
-                        if (enemy != newen && (Math.Abs(NewHitbox.X - newen.HitBox.X) < 10 && Math.Abs(NewHitbox.Y - newen.HitBox.Y) < 10))
+                        if (enemy != newen && (Math.Abs(NewHitbox.X - newen.HitBox.X) < 7 && Math.Abs(NewHitbox.Y - newen.HitBox.Y) < 7)&&newen.Damage!=0)
                         {
                             notCross = false;
+                            break;
                         }
                     }
                     if (notCross && enemy.Damage != 0) enemy.HitBox = NewHitbox;
                 }
                 if (Player.HitBox.IntersectsWith(new Rectangle(enemy.HitBox.X, enemy.HitBox.Y, enemy.HitBox.Width - 15, enemy.HitBox.Height-15)) && (Time - enemy.AttackTime >= 1000))
                 {
-                    Player.Health -= enemy.Damage;
+                    if (Player.Health - enemy.Damage > 0) Player.Health -= enemy.Damage;
+                    else Player.Health = 0;
                     enemy.AttackTime = Time;
                 }
-                if (enemy.Damage==0&&Time - enemy.DeathTime > 3000) 
+                if (enemy.Damage==0&&Time - enemy.DeathTime > 5000) 
                 {
                     Random rand = new Random();
-                    int numberMob = rand.Next(1, 4);//Всего прописано два моба, будет создаваться на рандом моб:1-птица,2,3-слизень(слизни слабее поэтому шанс их появления больше)
                     int RightOrLeft = rand.Next(1, 3);//1-будем генерировать моба справа, 2 - слева
                     int TopOrBottom = rand.Next(1, 3);//1-будем генерировать сверху, 2 - снизу
                     int X, Y;
@@ -363,17 +418,26 @@ namespace Game
                     {
                         Y = Player.HitBox.Y + rand.Next(360, 400);
                     }
-                    if (numberMob == 1)
-                    {
-                        Enemies.Add(new Bird(X, Y));
-                    }
-                    else 
-                    {
-                        Enemies.Add(new Slime(X, Y));
-                    }
                     enemy.Rebith(X,Y);
                 }
                  
+            }
+            if (Player.Experience >= LevelExp) 
+            {
+                Player.Experience -= Convert.ToInt32(LevelExp);
+                LevelExp =Convert.ToInt32(LevelExp* 1.2);
+                Player.Level++;
+                StopGame();
+                if (Player.Level < 14)
+                {
+                    panel1.Visible = true;
+                    
+                }
+                else 
+                {
+                    endGameTimer.Start();
+                }
+                pauseTimer.Start();
             }
             StatusLabel.Text = "X: " + MainPB.Left + "  Y: " + MainPB.Top + "Time: " + Time;
         }
@@ -419,7 +483,8 @@ namespace Game
             else 
             {
                 PlayerDeathTimer.Stop();
-                
+                Stopwatch.Stop();
+                endGameTimer.Start();
             }
         }
 
@@ -443,6 +508,135 @@ namespace Game
                 g.DrawString(Convert.ToString(Player.Health) + "/" + Convert.ToString(Player.MaxHealth), new Font("Copperplate Gothic Bold", 14), Brushes.White, 6+ Health.Width, 30);
             }
             
+        }
+
+        private void BackPB_Paint(object sender, PaintEventArgs e)
+        {
+            Graphics g = e.Graphics;
+            if (!playButton.Visible) 
+            {
+                g.DrawImage(Health, 6, 22);
+                g.DrawString(Convert.ToString(Player.Health) + "/" + Convert.ToString(Player.MaxHealth), new Font("Copperplate Gothic Bold", 14), Brushes.White, 6 + Health.Width, 30);
+                g.DrawString("Level " + Convert.ToString(Player.Level), new Font("Copperplate Gothic Bold", 14), Brushes.White, 6, 65);
+                if (Player.Level < 10)
+                {
+                    g.DrawRectangle(Pens.Black, 93, 67, 92, 16);
+                    g.FillRectangle(Brushes.Green, 92, 67, (float)(92 / LevelExp * Player.Experience) - 1, 16 - 1);
+                }
+                else
+                {
+                    g.DrawRectangle(Pens.Black, 106, 67, 92, 16);
+                    g.FillRectangle(Brushes.Green, 105, 67, (float)(92 / LevelExp * Player.Experience) - 1, 16 - 1);
+                }
+                g.DrawString("Time: " + Minutes + ":" + (Seconds).ToString("00"), new Font("Copperplate Gothic Bold", 14), Brushes.White, 6, 95);
+            }
+                
+                
+
+            
+            if (endGameTimer.Enabled)
+            {
+                Color redSemiTransparentColor = Color.FromArgb(Transparent, 255, 0, 0);
+                SolidBrush semiTransparentBrush = new SolidBrush(redSemiTransparentColor);
+                g.FillRectangle(semiTransparentBrush, 0, 0, this.Width, this.Height);
+            }
+            if (pauseTimer.Enabled)
+            {
+                Color graySemiTransparentColor = Color.FromArgb(PauseTransparent, 64, 64, 64);
+                SolidBrush semiTransparentBrush = new SolidBrush(graySemiTransparentColor);
+                g.FillRectangle(semiTransparentBrush, 0, 0, this.Width, this.Height);
+                g.DrawString("PAUSE", new Font("Copperplate Gothic Bold", 48), Brushes.White, 461,140);
+            }
+        }
+
+        private void damageButton_Click(object sender, EventArgs e)
+        {
+            damageLabel.Text = (Convert.ToInt32(damageLabel.Text) + 1).ToString();
+            if (damageLabel.Text == "3") 
+            {
+                damageButton.Visible = false;
+                damageLabel.Size = new Size(76, 32);
+                damageLabel.Text = "MAX";
+            } 
+            Player.Damage += 1;
+            panel1.Visible = false;
+            pauseTimer.Stop();
+            TickRate.Start();
+        }
+
+        private void healthButton_Click(object sender, EventArgs e)
+        {
+            healthLabel.Text = (Convert.ToInt32(healthLabel.Text) + 1).ToString();
+            if (healthLabel.Text == "3")
+            {
+                healthButton.Visible = false;
+                healthLabel.Size = new Size(76, 32);
+                healthLabel.Text = "MAX";
+            }
+            Player.MaxHealth += 50;
+            panel1.Visible = false;
+            pauseTimer.Stop();
+            TickRate.Start();
+        }
+
+        private void speedButton_Click(object sender, EventArgs e)
+        {
+            speedLabel.Text = (Convert.ToInt32(speedLabel.Text) + 1).ToString();
+            if (speedLabel.Text == "3")
+            {
+                speedButton.Visible = false;
+                speedLabel.Size = new Size(76, 32);
+                speedLabel.Text = "MAX";
+            }
+            Player.Speed += 1;
+            panel1.Visible = false;
+            pauseTimer.Stop();
+            TickRate.Start();
+        }
+
+        private void regenButton_Click(object sender, EventArgs e)
+        {
+            regenLabel.Text = (Convert.ToInt32(regenLabel.Text) + 1).ToString();
+            if (regenLabel.Text == "3")
+            {
+                regenButton.Visible = false;
+                regenLabel.Size = new Size(76, 32);
+                regenLabel.Text = "MAX";
+            }
+            Player.Regen += 5;
+            panel1.Visible = false;
+            pauseTimer.Stop();
+            TickRate.Start();
+        }
+
+        private void endGameTimer_Tick(object sender, EventArgs e)
+        {
+            if (Transparent + 5 < 255) Transparent += 5;
+            else 
+            {
+                Transparent = 255;
+                
+            }
+            
+            MainPB.Invalidate();
+            BackPB.Invalidate();
+        }
+
+        private void exitButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void pauseTimer_Tick(object sender, EventArgs e)
+        {
+            if (PauseTransparent + 5 < 128) PauseTransparent += 5;
+            else
+            {
+                PauseTransparent = 128;
+
+            }
+            BackPB.Invalidate();
+            MainPB.Invalidate();
         }
 
         private void playButton_MouseUp(object sender, MouseEventArgs e)
@@ -471,15 +665,68 @@ namespace Game
             //Отрисовка врагов
             foreach (Enemy enemy in Enemies) 
             {
-
-                    g.DrawImage(enemy.EnemySprite, enemy.HitBox.X, enemy.HitBox.Y);
-                
+                g.DrawImage(enemy.EnemySprite, enemy.HitBox.X, enemy.HitBox.Y);
                 g.DrawRectangle(Pens.Black, enemy.HitBox.X, enemy.HitBox.Y-5,enemy.HealthBoxWith,5);
                 g.FillRectangle(Brushes.Red, enemy.HitBox.X+1, enemy.HitBox.Y - 4, (float)(((enemy.HealthBoxWith)/enemy.MaxHealth)*enemy.Health), 4);
             }
             //Отрисовка Hud
             g.DrawImage(Health, Player.HitBox.X - 572, Player.HitBox.Y - 300);
             g.DrawString(Convert.ToString(Player.Health) + "/" + Convert.ToString(Player.MaxHealth), new Font("Copperplate Gothic Bold", 14),Brushes.White, Player.HitBox.X - 572+Health.Width, Player.HitBox.Y - 290);
+            g.DrawString("Level "+ Convert.ToString(Player.Level), new Font("Copperplate Gothic Bold", 14), Brushes.White, Player.HitBox.X - 572, Player.HitBox.Y - 255);
+            if (Player.Level < 10)
+            {
+                g.DrawRectangle(Pens.Black, Player.HitBox.X - 485, Player.HitBox.Y - 253, 92, 16);
+                g.FillRectangle(Brushes.Green, Player.HitBox.X - 484, Player.HitBox.Y - 252, (float)(92 / LevelExp * Player.Experience) - 1, 16 - 1);
+            }
+            else 
+            {
+                g.DrawRectangle(Pens.Black, Player.HitBox.X - 472, Player.HitBox.Y - 253, 92, 16);
+                g.FillRectangle(Brushes.Green, Player.HitBox.X - 471, Player.HitBox.Y - 252, (float)(92 / LevelExp * Player.Experience) - 1, 16 - 1);
+            }
+            Minutes = (int)Stopwatch.Elapsed.TotalMinutes;
+            Seconds = (int)(Stopwatch.Elapsed.TotalSeconds - 60 * (int)Stopwatch.Elapsed.TotalMinutes);
+            g.DrawString("Time: " + Minutes + ":" + (Seconds).ToString("00"), new Font("Copperplate Gothic Bold", 14), Brushes.White, Player.HitBox.X - 572, Player.HitBox.Y - 225);
+            if (endGameTimer.Enabled) 
+            {
+                Color redSemiTransparentColor = Color.FromArgb(Transparent, 255, 0, 0);
+                SolidBrush semiTransparentBrush = new SolidBrush(redSemiTransparentColor);
+                g.FillRectangle(semiTransparentBrush,Player.HitBox.X - 580, Player.HitBox.Y - 320,this.Width,this.Height);
+                if (Transparent == 255) 
+                {
+                    if (!deathLabel.Visible)
+                    {
+                        this.BackgroundImage = null;
+                        this.BackColor = Color.Red;
+                        deathLabel.Visible = true;
+                        if (Player.Level == 14)
+                        {
+                            deathLabel.Text = "GAME IS COMPLITED";
+                        }
+                        else 
+                        {
+                            deathLabel.Text = "YOU ARE DEAD";
+                        }
+                        ScoreLabel.Visible = true;
+                        ScoreNum.Visible = true;
+                        TimeLabel.Visible = true;
+                        TimeNum.Visible = true;
+                        LevelLabel.Visible = true;
+                        LevelNum.Visible = true;
+                        ScoreNum.Text = Player.MaxExperience.ToString();
+                        TimeNum.Text = (int)Stopwatch.Elapsed.TotalMinutes + ":" + ((int)(Stopwatch.Elapsed.TotalSeconds - 60 * (int)Stopwatch.Elapsed.TotalMinutes)).ToString("00");
+                        LevelNum.Text = Player.Level.ToString();
+                        exitButton.Visible = true;
+                    }
+
+                }
+            }
+            if (pauseTimer.Enabled) 
+            {
+                Color graySemiTransparentColor = Color.FromArgb(PauseTransparent, 64,64,64);
+                SolidBrush semiTransparentBrush = new SolidBrush(graySemiTransparentColor);
+                g.FillRectangle(semiTransparentBrush, Player.HitBox.X - 580, Player.HitBox.Y - 320, this.Width, this.Height);
+                if(!panel1.Visible) g.DrawString("PAUSE", new Font("Copperplate Gothic Bold", 48), Brushes.White, Player.HitBox.X - 117, Player.HitBox.Y - 180);
+            }
         }
 
         private void Form1_KeyUp(object sender, KeyEventArgs e)

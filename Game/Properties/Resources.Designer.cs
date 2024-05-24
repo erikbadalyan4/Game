@@ -583,6 +583,26 @@ namespace Game.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Update_Menu {
+            get {
+                object obj = ResourceManager.GetObject("Update Menu", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap upmenu {
+            get {
+                object obj = ResourceManager.GetObject("upmenu", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap wattack1 {
             get {
                 object obj = ResourceManager.GetObject("wattack1", resourceCulture);

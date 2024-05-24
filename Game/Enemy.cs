@@ -20,6 +20,7 @@ namespace Game
         public int HealthBoxWith {  get; set; }
         public int DeathSpriteIndex { get; set; }
         public int DeathTime { get; set; }//Переменная хранит в себе время смерти моба, используется для того чтобы мобы перерождались
+        public int Experience { get; set; }//Сколько опыта получит персонаж при убийстве моба
         public Rectangle HitBox { get; set; }
         public Point Vector { get; set; }//Хранит сколько нужно сместиться по X и по Y чтобы дойти до персонажа 
         public Point Step { get; set; }
@@ -43,6 +44,7 @@ namespace Game
             Damage = 25;
             Speed = 4;
             DeathSpriteIndex = 0;
+            Experience = 100;
             Shadow = new Point(-15, -6);
             HealthBoxWith = 65;
             Sprites = new Queue<Bitmap>();
@@ -60,6 +62,7 @@ namespace Game
             DeathSpriteIndex = 0;
             AttackTime = 0;
             HealthBoxWith = 65;
+            Experience = 100;
             Shadow = new Point(-15, -6);
             Sprites = new Queue<Bitmap>();
             EnemySprite = new Bitmap(Properties.Resources.bstanright,70, 50);
@@ -155,6 +158,7 @@ namespace Game
             Damage = 15;
             Speed = 2;
             DeathSpriteIndex = 0;
+            Experience = 75;
             Shadow = new Point(-10, -12);
             HealthBoxWith = 55;
             Sprites = new Queue<Bitmap>();
@@ -171,6 +175,7 @@ namespace Game
             Speed = 2;
             DeathSpriteIndex = 0;
             AttackTime = 0;
+            Experience = 75;
             Shadow = new Point(-10, -12);
             HealthBoxWith = 55;
             Sprites = new Queue<Bitmap>();

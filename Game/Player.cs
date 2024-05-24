@@ -17,6 +17,9 @@ namespace Game
         public int Regen { get; set; }
         public int Damage { get; set; }
         public int AttackInterval { get; set; }
+        public int Experience { get; set; }//Сколько опыта на данный момент, при повышении уровня зануляется
+        public int MaxExperience { get; set; }//Сколько в общем очков набрал игрок
+        public int Level { get; set; }
         public Rectangle HitBox { get; set; }
         public Rectangle AttackHitBox { get; set; }
         public abstract void StayR();
@@ -36,6 +39,8 @@ namespace Game
             Regen = 0;
             Speed = 3;
             AttackInterval = 3000;
+            Level = 1;
+            Experience = 0; MaxExperience = 0;
             Sprites = new Queue<Bitmap>();
             Bitmap PlayerSprite = new Bitmap(Properties.Resources.wstanright);
             Sprites.Enqueue(PlayerSprite);
@@ -56,6 +61,8 @@ namespace Game
             Regen = 0;
             Speed = 3;
             AttackInterval = 3000;
+            Experience = 0; MaxExperience = 0;
+            Level = 1;
             Sprites = new Queue<Bitmap>();
             Bitmap PlayerSprite = new Bitmap(Properties.Resources.wstanright);
             Sprites.Enqueue(PlayerSprite);

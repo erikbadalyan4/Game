@@ -372,5 +372,11 @@
   <ItemGroup>
     <None Include="Resources\stonesback.JPG" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Update Menu.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\upmenu.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
